@@ -15,8 +15,6 @@ public class EduApp {
           case "add" : classroomController.doAdd(); break;
           case "list" : classroomController.doList(); break;
           case "view" : classroomController.doView(); break;
-          case "delete" : classroomController.doDelete(); break;
-          case "update" : classroomController.doUpdate(); break;
           case "quit" :
             System.out.println("Good Bye!");
             break loop;
