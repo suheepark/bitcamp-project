@@ -4,9 +4,9 @@ public class EduApp {
   public static void main(String[] args) {
     System.out.println("비트캠프 관리 시스템에 오신 걸 환영합니다!");
     ClassRoom[] classrooms = new ClassRoom[100];
-    Scanner keyScan = new Scanner(System.in);
     int length = 0;
 
+    Scanner keyScan = new Scanner(System.in);
     while (length < classrooms.length) {
       ClassRoom classroom = new ClassRoom();
       System.out.print("강의실 번호(예: 302)? ");
@@ -22,19 +22,19 @@ public class EduApp {
       System.out.print("사물함 유무(y/n)? ");
       classroom.locker = (keyScan.nextLine().equals("y")) ? true : false;
       classrooms[length++] = classroom;
-      System.out.print("계속 입력하시겠습니까(y or n)?");
+
+      System.out.print("계속 입력하시겠습니다? (y/n)");
       if (!keyScan.nextLine().equals("y"))
         break;
       }
-      printList(classrooms, length);
+  printClassRoom(classrooms, length);
+  }
+  static void printClassRoom(ClassRoom[] classrooms, int length) {
+    for (int i = 0; i < length; i++) {
+      ClassRoom classroom = classrooms[i];
+      System.out.printf("%d %d %s %s %s %s\n",
+      classroom.roomNo, classroom.capacity, classroom.className, classroom.classTime,
+      ((classroom.projector=true) ? "Yes" : "No"), ((classroom.locker=true) ? "Yes" : "No"));
     }
-
-    static void printList(ClassRoom[] classrooms, int length) {
-      for (int i = 0; i < length; i++) {
-        ClassRoom classroom = classrooms[i];
-        System.out.printf("%d %d %s %s %s %s\n",
-        classroom.roomNo,classroom.capacity,classroom.className,classroom.classTime,
-        (classroom.projector)?"YES":"NO",(classroom.locker)?"YES":"NO");
-      }
-    }
+  }
 }

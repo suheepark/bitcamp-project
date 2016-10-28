@@ -4,8 +4,6 @@ public class ClassRoom {
   int roomNo;
   int capacity;
   String className;
-  int startTime;
-  int endTime;
   String classTime;
   boolean projector;
   boolean locker;
