@@ -3,14 +3,14 @@ import java.util.Scanner;
 public class ClassroomController {
   private Box head;
   private Box tail;
-  private int length;
   private Scanner keyScan;
+  private LinkedList list;
 
   public ClassroomController(Scanner keyScan) {
     this.keyScan = keyScan;
     head = new Box();
     tail = head;
-    length = 0;
+    list = new LinkedList();
   }
 
   public void service() {
@@ -46,10 +46,7 @@ public class ClassroomController {
       classroom.projector = (this.keyScan.nextLine().equals("y")) ? true : false;
       System.out.print("사물함 유무(y/n)? ");
       classroom.locker = (this.keyScan.nextLine().equals("y")) ? true : false;
-      tail.value = classroom;
-      tail.next = new Box();
-      tail = tail.next;
-      length++;
+      list.add(classroom);
 
       System.out.print("계속 입력하시겠습니다? (y/n)");
       if (!keyScan.nextLine().equals("y"))
@@ -58,30 +55,24 @@ public class ClassroomController {
   }
 
   private void doList() {
-    Box currentBox = head;
-    for (int i = 0; i < length; i++) {
-      Classroom classroom = (Classroom)currentBox.value;
+    for (int i = 0; i < list.size(); i++) {
+      Classroom classroom = (Classroom)list.get(i);
       System.out.printf("%d %d %s %s %s %s\n",
       classroom.roomNo, classroom.capacity,
       classroom.className, classroom.classTime,
       ((classroom.projector) ? "Yes" : "No"),
       ((classroom.locker) ? "Yes" : "No"));
-      currentBox = currentBox.next;
     }
   }
 
   private void doView() {
     System.out.print("강의실 인덱스를 입력하세요 : ");
     int index = Integer.parseInt(keyScan.nextLine());
-    if (index < 0 || index >= length) {
+    if (index < 0 || index >= list.size()) {
       System.out.println("인덱스가 유효하지 않습니다.");
       return;
     }
-    Box currentBox = head;
-    for (int i = 0; i < index; i++) {
-      currentBox = currentBox.next;
-    }
-    Classroom classroom = (Classroom)currentBox.value;
+    Classroom classroom = (Classroom)list.get(index);
     System.out.printf("강의실 번호 : %d\n", classroom.roomNo);
     System.out.printf("수용인원 : %d\n", classroom.capacity);
     System.out.printf("강의명 : %s\n", classroom.className);
@@ -93,38 +84,22 @@ public class ClassroomController {
   private void doDelete() {
     System.out.print("삭제할 강의실 인덱스를 입력하세요 : ");
     int index = Integer.parseInt(keyScan.nextLine());
-    if (index < 0 || index >= length) {
+    if (index < 0 || index >= list.size()) {
       System.out.println("인덱스가 유효하지 않습니다.");
       return;
     }
-    Classroom deleteclassroom = null;
-    if (index == 0) {
-      deleteclassroom = (Classroom)head.value;
-      head = head.next;
-    } else {
-      Box currentBox = head;
-      for (int i = 0; i < (index - 1); i++) {
-        currentBox = currentBox.next;
-      }
-      deleteclassroom = (Classroom)currentBox.next.value;
-      currentBox.next = currentBox.next.next;
-    }
-    length--;
+    Classroom deleteclassroom = (Classroom)list.remove(index);
     System.out.printf("%d 강의실 정보를 삭제하였습니다.\n", deleteclassroom.roomNo);
   }
 
   private void doUpdate() {
     System.out.print("변경할 강의실 인덱스를 입력하세요 : ");
     int index = Integer.parseInt(keyScan.nextLine());
-    if (index < 0 || index >= length) {
+    if (index < 0 || index >= list.size()) {
       System.out.println("인덱스가 유효하지 않습니다.");
       return;
     }
-    Box currentBox = head;
-    for (int i = 0; i < index; i++) {
-      currentBox = currentBox.next;
-    }
-    Classroom oldclassroom = (Classroom)currentBox.value;
+    Classroom oldclassroom = (Classroom)list.get(index);
     Classroom classroom = new Classroom();
     System.out.print("강의실 번호(예: 302)? ");
     classroom.roomNo = Integer.parseInt(this.keyScan.nextLine());
@@ -141,9 +116,10 @@ public class ClassroomController {
 
     System.out.print("저장하시겠습니까 (y/n)? ");
     if (this.keyScan.nextLine().equals("y")) {
-      currentBox.value = classroom;
+      list.set(index, classroom);
       System.out.println("저장하였습니다.");
-      return;
+    } else {
+      System.out.println("변경을 취소하였습니다.");
     }
   }
 

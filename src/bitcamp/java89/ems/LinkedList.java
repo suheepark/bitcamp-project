@@ -25,7 +25,7 @@ public class LinkedList {
     for (int i = 0; i < index; i++) {
       cursor = cursor.next;
     }
-    return cursor;
+    return cursor.value;
   }
 
   public Object set(int index, Object newValue) {
