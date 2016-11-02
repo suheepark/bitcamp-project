@@ -1,15 +1,33 @@
 package bitcamp.java89.ems;
 import java.util.Scanner;
 public class ClassroomController {
-  ClassRoom[] classrooms = new ClassRoom[100];
-  int length = 0;
-  Scanner keyScan;
+  private ClassRoom[] classrooms = new ClassRoom[100];
+  private int length = 0;
+  private Scanner keyScan;
 
   public ClassroomController(Scanner keyScan) {
     this.keyScan = keyScan;
   }
 
-  public void doAdd() {
+  public void service() {
+    loop:
+      while (true) {
+        System.out.print("강의실 관리> ");
+        String command = keyScan.nextLine().toLowerCase(); // 소문자로 값을 받는다.
+        switch (command) {
+          case "add" : this.doAdd(); break;
+          case "list" : this.doList(); break;
+          case "view" : this.doView(); break;
+          case "delete" : this.doDelete(); break;
+          case "update" : this.doUpdate(); break;
+          case "main" : break loop;
+          default :
+            System.out.println("지원하지 않는 명령어입니다.");
+        }
+      }
+  }
+
+  private void doAdd() {
     while (this.length < classrooms.length) {
       ClassRoom classroom = new ClassRoom();
       System.out.print("강의실 번호(예: 302)? ");
@@ -32,7 +50,7 @@ public class ClassroomController {
     }
   }
 
-  public void doList() {
+  private void doList() {
     for (int i = 0; i < this.length; i++) {
       ClassRoom classroom = this.classrooms[i];
       System.out.printf("%d %d %s %s %s %s\n",
@@ -41,7 +59,7 @@ public class ClassroomController {
     }
   }
 
-  public void doView() {
+  private void doView() {
     System.out.print("강의실 번호를 입력하세요 : ");
     String num = this.keyScan.nextLine();
     for (int  i = 0; i < this.length; i++) {
@@ -55,5 +73,55 @@ public class ClassroomController {
         break;
       }
     }
+  }
+
+  private void doDelete() {
+    System.out.print("삭제할 강의실 번호를 입력하세요 : ");
+    String num = this.keyScan.nextLine();
+    for (int  i = 0; i < this.length; i++) {
+      if (num.equals(Integer.toString(this.classrooms[i].roomNo))) {
+        for (int x = i + 1; x < this.length; x++, i++) {
+          this.classrooms[i] = this.classrooms[x];
+        }
+        this.classrooms[--length] = null;
+        System.out.printf("%s호 강의실 정보를 삭제하였습니다.\n", num);
+        return;
+      }
+    }
+    System.out.printf("%s호 강의실 정보가 없습니다.\n", num);
+  }
+
+  private void doUpdate() {
+    System.out.print("변경할 강의실 번호를 입력하세요 : ");
+    String num = this.keyScan.nextLine();
+    for (int  i = 0; i < this.length; i++) {
+      if (num.equals(Integer.toString(this.classrooms[i].roomNo))) {
+        ClassRoom classroom = new ClassRoom();
+        System.out.print("강의실 번호(예: 302)? ");
+        classroom.roomNo = Integer.parseInt(this.keyScan.nextLine());
+        System.out.print("수용가능인원(예: 30)? ");
+        classroom.capacity = Integer.parseInt(this.keyScan.nextLine());
+        System.out.print("강의명(예: 자바개발자과정)? ");
+        classroom.className = this.keyScan.nextLine();
+        System.out.print("강의 시간(예: 09:00~17:00)? ");
+        classroom.classTime = this.keyScan.nextLine();
+        System.out.print("프로젝터 유무(y/n)? ");
+        classroom.projector = (this.keyScan.nextLine().equals("y")) ? true : false;
+        System.out.print("사물함 유무(y/n)? ");
+        classroom.locker = (this.keyScan.nextLine().equals("y")) ? true : false;
+
+        System.out.print("저장하시겠습니까 (y/n)? ");
+        if (this.keyScan.nextLine().equals("y")) {
+          this.classrooms[i] = classroom;
+          System.out.println("저장하였습니다.");
+          return;
+        }
+        else {
+          System.out.println("변경을 취소하였습니다.");
+          return;
+        }
+      }
+    }
+    System.out.printf("%s호 강의실은 없습니다.\n", num);
   }
 }
