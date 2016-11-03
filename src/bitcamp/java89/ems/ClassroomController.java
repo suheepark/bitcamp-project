@@ -1,16 +1,12 @@
 package bitcamp.java89.ems;
 import java.util.Scanner;
 public class ClassroomController {
-  private Box head;
-  private Box tail;
   private Scanner keyScan;
-  private LinkedList list;
+  private LinkedList<Classroom> list;
 
   public ClassroomController(Scanner keyScan) {
     this.keyScan = keyScan;
-    head = new Box();
-    tail = head;
-    list = new LinkedList();
+    list = new LinkedList<Classroom>();
   }
 
   public void service() {
@@ -56,7 +52,7 @@ public class ClassroomController {
 
   private void doList() {
     for (int i = 0; i < list.size(); i++) {
-      Classroom classroom = (Classroom)list.get(i);
+      Classroom classroom = list.get(i);
       System.out.printf("%d %d %s %s %s %s\n",
       classroom.roomNo, classroom.capacity,
       classroom.className, classroom.classTime,
@@ -72,7 +68,7 @@ public class ClassroomController {
       System.out.println("인덱스가 유효하지 않습니다.");
       return;
     }
-    Classroom classroom = (Classroom)list.get(index);
+    Classroom classroom = list.get(index);
     System.out.printf("강의실 번호 : %d\n", classroom.roomNo);
     System.out.printf("수용인원 : %d\n", classroom.capacity);
     System.out.printf("강의명 : %s\n", classroom.className);
@@ -88,7 +84,7 @@ public class ClassroomController {
       System.out.println("인덱스가 유효하지 않습니다.");
       return;
     }
-    Classroom deleteclassroom = (Classroom)list.remove(index);
+    Classroom deleteclassroom = list.remove(index);
     System.out.printf("%d 강의실 정보를 삭제하였습니다.\n", deleteclassroom.roomNo);
   }
 
@@ -99,7 +95,7 @@ public class ClassroomController {
       System.out.println("인덱스가 유효하지 않습니다.");
       return;
     }
-    Classroom oldclassroom = (Classroom)list.get(index);
+    Classroom oldclassroom = list.get(index);
     Classroom classroom = new Classroom();
     System.out.print("강의실 번호(예: 302)? ");
     classroom.roomNo = Integer.parseInt(this.keyScan.nextLine());
