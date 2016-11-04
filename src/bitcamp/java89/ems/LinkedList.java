@@ -16,10 +16,9 @@ public class LinkedList<T> {
     length++;
   }
 
-  public T get(int index) {
+  public T get(int index) throws IndexOutOfBoundsException {
     if (index < 0 || index >= length) {
-      System.out.println("인덱스가 유효하지 않습니다.");
-      return null;
+      throw new IndexOutOfBoundsException("인덱스가 유효하지 않습니다.");
     }
     Box<T> cursor = head;
     for (int i = 0; i < index; i++) {
@@ -28,10 +27,9 @@ public class LinkedList<T> {
     return cursor.value;
   }
 
-  public T set(int index, T newValue) {
+  public T set(int index, T newValue) throws IndexOutOfBoundsException {
     if (index < 0 || index >= length) {
-      System.out.println("인덱스가 유효하지 않습니다.");
-      return null;
+      throw new IndexOutOfBoundsException("인덱스가 유효하지 않습니다.");
     }
     Box<T> cursor = head;
     for (int i = 0; i < index; i++) {
@@ -42,10 +40,9 @@ public class LinkedList<T> {
     return oldValue;
   }
 
-  public T remove(int index) {
+  public T remove(int index) throws IndexOutOfBoundsException {
     if (index < 0 || index >= length) {
-      System.out.println("인덱스가 유효하지 않습니다.");
-      return null;
+      throw new IndexOutOfBoundsException("인덱스가 유효하지 않습니다.");
     }
     T oldValue = null;
     if (index == 0) {

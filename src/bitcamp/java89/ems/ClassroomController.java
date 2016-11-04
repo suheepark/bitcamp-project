@@ -14,15 +14,21 @@ public class ClassroomController {
       while (true) {
         System.out.print("강의실 관리> ");
         String command = keyScan.nextLine().toLowerCase(); // 소문자로 값을 받는다.
-        switch (command) {
-          case "add" : this.doAdd(); break;
-          case "list" : this.doList(); break;
-          case "view" : this.doView(); break;
-          case "delete" : this.doDelete(); break;
-          case "update" : this.doUpdate(); break;
-          case "main" : break loop;
-          default :
-            System.out.println("지원하지 않는 명령어입니다.");
+        try {
+          switch (command) {
+            case "add" : this.doAdd(); break;
+            case "list" : this.doList(); break;
+            case "view" : this.doView(); break;
+            case "delete" : this.doDelete(); break;
+            case "update" : this.doUpdate(); break;
+            case "main" : break loop;
+            default :
+              System.out.println("지원하지 않는 명령어입니다.");
+          }
+        } catch (IndexOutOfBoundsException e) {
+          System.out.println("인덱스가 유효하지 않습니다.");
+        } catch (Exception e) {
+          System.out.println("인덱스 값이 잘못되었거나, 실행 중 오류가 발생했습니다.");
         }
       }
   }
@@ -30,10 +36,17 @@ public class ClassroomController {
   private void doAdd() {
     while (true) {
       Classroom classroom = new Classroom();
-      System.out.print("강의실 번호(예: 302)? ");
-      classroom.roomNo = Integer.parseInt(this.keyScan.nextLine());
-      System.out.print("수용가능인원(예: 30)? ");
-      classroom.capacity = Integer.parseInt(this.keyScan.nextLine());
+      while (true) {
+        try { 
+          System.out.print("강의실 번호(예: 302)? ");
+          classroom.roomNo = Integer.parseInt(this.keyScan.nextLine());
+          System.out.print("수용가능인원(예: 30)? ");
+          classroom.capacity = Integer.parseInt(this.keyScan.nextLine());
+          break;
+        } catch (Exception e) {
+          System.out.println("입력값이 잘못되었습니다.(숫자만 입력)");
+        }
+      }
       System.out.print("강의명(예: 자바개발자)? ");
       classroom.className = this.keyScan.nextLine();
       System.out.print("강의 시간(예: 09:00~17:00)? ");
@@ -43,11 +56,11 @@ public class ClassroomController {
       System.out.print("사물함 유무(y/n)? ");
       classroom.locker = (this.keyScan.nextLine().equals("y")) ? true : false;
       list.add(classroom);
-
+    
       System.out.print("계속 입력하시겠습니다? (y/n)");
       if (!keyScan.nextLine().equals("y"))
         break;
-    }
+    } //while
   }
 
   private void doList() {
@@ -64,10 +77,6 @@ public class ClassroomController {
   private void doView() {
     System.out.print("강의실 인덱스를 입력하세요 : ");
     int index = Integer.parseInt(keyScan.nextLine());
-    if (index < 0 || index >= list.size()) {
-      System.out.println("인덱스가 유효하지 않습니다.");
-      return;
-    }
     Classroom classroom = list.get(index);
     System.out.printf("강의실 번호 : %d\n", classroom.roomNo);
     System.out.printf("수용인원 : %d\n", classroom.capacity);
@@ -80,10 +89,6 @@ public class ClassroomController {
   private void doDelete() {
     System.out.print("삭제할 강의실 인덱스를 입력하세요 : ");
     int index = Integer.parseInt(keyScan.nextLine());
-    if (index < 0 || index >= list.size()) {
-      System.out.println("인덱스가 유효하지 않습니다.");
-      return;
-    }
     Classroom deleteclassroom = list.remove(index);
     System.out.printf("%d 강의실 정보를 삭제하였습니다.\n", deleteclassroom.roomNo);
   }
@@ -91,10 +96,6 @@ public class ClassroomController {
   private void doUpdate() {
     System.out.print("변경할 강의실 인덱스를 입력하세요 : ");
     int index = Integer.parseInt(keyScan.nextLine());
-    if (index < 0 || index >= list.size()) {
-      System.out.println("인덱스가 유효하지 않습니다.");
-      return;
-    }
     Classroom oldclassroom = list.get(index);
     Classroom classroom = new Classroom();
     System.out.print("강의실 번호(예: 302)? ");
