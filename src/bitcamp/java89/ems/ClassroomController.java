@@ -1,19 +1,20 @@
 package bitcamp.java89.ems;
 import java.util.Scanner;
+import java.util.ArrayList;
 public class ClassroomController {
   private Scanner keyScan;
-  private LinkedList<Classroom> list;
+  private ArrayList<Classroom> list;
 
   public ClassroomController(Scanner keyScan) {
     this.keyScan = keyScan;
-    list = new LinkedList<Classroom>();
+    list = new ArrayList<Classroom>();
   }
 
   public void service() {
     loop:
       while (true) {
         System.out.print("강의실 관리> ");
-        String command = keyScan.nextLine().toLowerCase(); // 소문자로 값을 받는다.
+        String command = keyScan.nextLine().toLowerCase();
         try {
           switch (command) {
             case "add" : this.doAdd(); break;
@@ -64,8 +65,7 @@ public class ClassroomController {
   }
 
   private void doList() {
-    for (int i = 0; i < list.size(); i++) {
-      Classroom classroom = list.get(i);
+    for (Classroom classroom : list) {
       System.out.printf("%d %d %s %s %s %s\n",
       classroom.roomNo, classroom.capacity,
       classroom.className, classroom.classTime,
