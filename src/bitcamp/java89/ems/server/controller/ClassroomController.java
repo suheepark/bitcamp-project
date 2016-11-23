@@ -1,52 +1,25 @@
 package bitcamp.java89.ems.server.controller;
-import java.io.EOFException;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
+import bitcamp.java89.ems.server.dao.ClassroomDao;
 import bitcamp.java89.ems.server.vo.Classroom;
 public class ClassroomController {
   private Scanner in;
   private PrintStream out;
-  private ArrayList<Classroom> list;
-  static boolean changed = false;
-  private String filename = "classroom-v1.6.data";
+  private ClassroomDao classroomDao;
   
   public ClassroomController(Scanner in, PrintStream out) throws IOException {
     this.in = in;
     this.out = out;
-    list = new ArrayList<Classroom>();
-    this.doLoad();
+    classroomDao = ClassroomDao.getInstance();
   }
 
   public boolean isChanged() {
-    return changed;
-  }
-
-  @SuppressWarnings("unchecked")
-  private void doLoad() {
-    FileInputStream in0 = null;
-    ObjectInputStream in = null;
-    try {
-      in0 = new FileInputStream(this.filename);
-      in = new ObjectInputStream(in0);
-      list = (ArrayList<Classroom>)in.readObject();
-    } catch (EOFException e) {
-      // 파일을 모두 읽은 경우
-    } catch (Exception e) {
-      //out.println("강의실 데이터 로딩 중 오류 발생!");
-    } finally {
-      try {
-        in.close();
-        in0.close();
-      } catch (Exception e) {}
-    }
+    return classroomDao.isChanged();
   }
 
   public boolean service() throws IOException {
@@ -73,12 +46,9 @@ public class ClassroomController {
   }
 
   public void save() throws Exception {
-    FileOutputStream out0 = new FileOutputStream(this.filename);
-    ObjectOutputStream out = new ObjectOutputStream(out0);
-    out.writeObject(list);
-    changed = false;
-    out.close();
-    out0.close();
+    if (classroomDao.isChanged()) {
+      classroomDao.save();
+    }
   }
   
   private void doAdd(String params) {
@@ -88,6 +58,10 @@ public class ClassroomController {
       String[] kv = value.split("=");
       paramMap.put(kv[0], kv[1]);
     }
+    if (classroomDao.existRoomNo(Integer.parseInt(paramMap.get("roomno")))) {
+      out.println("동일한 강의실 번호가 존재합니다. 등록을 취소합니다.");
+      return;
+    }
     Classroom classroom = new Classroom(); 
     classroom.setRoomNo(Integer.parseInt(paramMap.get("roomno")));
     classroom.setCapacity(Integer.parseInt(paramMap.get("capacity")));
@@ -95,13 +69,12 @@ public class ClassroomController {
     classroom.setClassTime(paramMap.get("classtime"));
     classroom.setProjector(paramMap.get("projector").equals("t") ? true : false );
     classroom.setLocker(paramMap.get("locker").equals("t") ? true : false );
-
-    list.add(classroom);
-    changed = true;
-    out.println("저장하였습니다.");
+    classroomDao.insert(classroom);
+    out.println("등록하였습니다.");
   }
 
   private void doList() {
+    ArrayList<Classroom> list = classroomDao.getList();
     for (Classroom classroom : list) {
       out.printf("%d %d %s %s %s %s\n",
       classroom.getRoomNo(), classroom.getCapacity(),
@@ -113,6 +86,7 @@ public class ClassroomController {
 
   private void doView(String params) {
     String[] kv = params.split("=");
+    ArrayList<Classroom> list = classroomDao.getListByRoomNo(Integer.parseInt(kv[1]));
     for (Classroom classroom : list) {
       if (classroom.getRoomNo() == Integer.parseInt(kv[1])) {
         out.printf("강의실 번호 : %d\n", classroom.getRoomNo());
@@ -129,14 +103,11 @@ public class ClassroomController {
 
   private void doDelete(String params) {
     String[] kv = params.split("=");
-    for (Classroom classroom : list) {
-      if (classroom.getRoomNo() == Integer.parseInt(kv[1])) {
-        list.remove(classroom);
-        changed = true;
-        out.println("삭제하였습니다.");
-        return;
-      }
+    if (!classroomDao.existRoomNo(Integer.parseInt(kv[1]))) {
+      out.println("해당 데이터가 없습니다.");
     }
+    classroomDao.delete(Integer.parseInt(kv[1]));
+    out.println("삭제하였습니다");
   }
 
   private void doUpdate(String params) {
@@ -146,19 +117,19 @@ public class ClassroomController {
       String[] kv = value.split("=");
       paramMap.put(kv[0], kv[1]);
     }
-    for (Classroom classroom : list) {
-      if (classroom.getRoomNo() == Integer.parseInt(paramMap.get("roomno"))) {
-        classroom.setCapacity(Integer.parseInt(paramMap.get("capacity")));
-        classroom.setClassName(paramMap.get("classname"));
-        classroom.setClassTime(paramMap.get("classtime"));
-        classroom.setProjector(paramMap.get("projector").equals("t") ? true : false);
-        classroom.setLocker(paramMap.get("locker").equals("t") ? true : false);
-        changed = true;
-        out.println("변경하였습니다.");
-        return;
-      }
+    if (!classroomDao.existRoomNo(Integer.parseInt(paramMap.get("roomno")))) {
+      out.println("해당 데이터가 없습니다.");
+      return;
     }
-    out.println("해당 데이터를 찾지 못했습니다.");
+    Classroom classroom = new Classroom();
+    classroom.setRoomNo(Integer.parseInt(paramMap.get("roomno")));
+    classroom.setCapacity(Integer.parseInt(paramMap.get("capacity")));
+    classroom.setClassName(paramMap.get("classname"));
+    classroom.setClassTime(paramMap.get("classtime"));
+    classroom.setProjector(paramMap.get("projector").equals("t") ? true : false);
+    classroom.setLocker(paramMap.get("locker").equals("t") ? true : false);
+    classroomDao.update(classroom);
+    out.println("변경하였습니다.");
   }
 
 }

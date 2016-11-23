@@ -19,11 +19,9 @@ public class EduAppClient {
       while (true) {
         boolean firstLine = true;
         while (true) {
-          if (!firstLine) {System.out.println();}
-          else {firstLine = false;}
           String message = in.nextLine();
-          System.out.printf("%s%s", firstLine ? "":"\n", message);
           if (message.length() == 0) {break;}
+          System.out.printf("%s%s", firstLine ? "":"\n", message);
           firstLine = false;
         }
         String command = keyScan.nextLine();
