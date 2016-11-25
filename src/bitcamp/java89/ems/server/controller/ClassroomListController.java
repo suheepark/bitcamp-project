@@ -20,4 +20,10 @@ public class ClassroomListController extends AbstractCommand {
     }
   }
 
+  @Override
+  public String getCommandString() {
+    // TODO Auto-generated method stub
+    return "classroom/list";
+  }
+
 }

@@ -15,5 +15,11 @@ public class ContactDeleteController extends AbstractCommand{
     }
     contactDao.delete(paramMap.get("email"));
     out.println("삭제하였습니다.");
-   } 
+   }
+
+  @Override
+  public String getCommandString() {
+    // TODO Auto-generated method stub
+    return "contact/delete";
+  } 
  }

@@ -1,33 +1,23 @@
 package bitcamp.java89.ems.server;
+import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.util.ArrayList;
 import java.util.HashMap;
-
-import bitcamp.java89.ems.server.controller.ClassroomAddController;
-import bitcamp.java89.ems.server.controller.ClassroomDeleteController;
-import bitcamp.java89.ems.server.controller.ClassroomListController;
-import bitcamp.java89.ems.server.controller.ClassroomUpdateController;
-import bitcamp.java89.ems.server.controller.ClassroomViewController;
-import bitcamp.java89.ems.server.controller.ContactAddController;
-import bitcamp.java89.ems.server.controller.ContactDeleteController;
-import bitcamp.java89.ems.server.controller.ContactListController;
-import bitcamp.java89.ems.server.controller.ContactUpdateController;
-import bitcamp.java89.ems.server.controller.ContactViewController;
 
 public class EduAppServer{
   HashMap<String,Command> commandMap = new HashMap<>();
   
   public EduAppServer() throws IOException {
-    commandMap.put("contact/list",new ContactListController());
-    commandMap.put("contact/view",new ContactViewController());
-    commandMap.put("contact/add",new ContactAddController());
-    commandMap.put("contact/delete",new ContactDeleteController());
-    commandMap.put("contact/update",new ContactUpdateController());
-    commandMap.put("classroom/add",new ClassroomAddController());
-    commandMap.put("classroom/list",new ClassroomListController());
-    commandMap.put("classroom/view",new ClassroomViewController());
-    commandMap.put("classroom/delete",new ClassroomDeleteController());
-    commandMap.put("classroom/update",new ClassroomUpdateController());
+    ArrayList<Class> classList = new ArrayList<>();
+    ReflectionUtil.getCommandClasses(new File("./bin"), classList);
+    for (Class c : classList) {
+      try {
+        AbstractCommand command = (AbstractCommand)c.newInstance();
+        commandMap.put(command.getCommandString(), command);
+      } catch (Exception e) {}
+    }
+
   }
   public static void main(String[] args) throws Exception {
     EduAppServer eduServer = new EduAppServer();

@@ -19,4 +19,10 @@ public class ContactListController extends AbstractCommand {
       contact.getTel(), contact.getEmail());
     }
   }
+
+  @Override
+  public String getCommandString() {
+    // TODO Auto-generated method stub
+    return "contact/list";
+  }
 }

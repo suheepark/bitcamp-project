@@ -22,4 +22,10 @@ public class ContactUpdateController extends AbstractCommand{
       return;
     }
   }
+
+  @Override
+  public String getCommandString() {
+    // TODO Auto-generated method stub
+    return "contact/update";
+  }
 }

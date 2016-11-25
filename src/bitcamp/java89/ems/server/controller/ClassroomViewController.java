@@ -24,4 +24,10 @@ public class ClassroomViewController extends AbstractCommand {
     }
   }
 
+  @Override
+  public String getCommandString() {
+    // TODO Auto-generated method stub
+    return "classroom/view";
+  }
+
 }

@@ -21,4 +21,10 @@ public class ClassroomUpdateController extends AbstractCommand {
     return;
   }
 
+  @Override
+  public String getCommandString() {
+    // TODO Auto-generated method stub
+    return "classroom/update";
+  }
+
 }

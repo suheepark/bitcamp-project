@@ -23,4 +23,10 @@ public class ContactAddController extends AbstractCommand{
     contactDao.insert(contact);
     out.println("등록하였습니다.");
     }
+
+  @Override
+  public String getCommandString() {
+    // TODO Auto-generated method stub
+    return "contact/add";
+  }
   }

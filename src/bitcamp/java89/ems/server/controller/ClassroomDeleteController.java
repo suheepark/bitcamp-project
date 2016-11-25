@@ -12,4 +12,10 @@ public class ClassroomDeleteController extends AbstractCommand {
     out.println("삭제하였습니다");
   }
 
+  @Override
+  public String getCommandString() {
+    // TODO Auto-generated method stub
+    return "classroom/delete";
+  }
+
 }

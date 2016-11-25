@@ -23,4 +23,9 @@ public class ContactViewController extends AbstractCommand{
       }
     } 
   }
+
+  @Override
+  public String getCommandString() {
+    return "contact/view";
+  }
 }

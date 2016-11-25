@@ -21,4 +21,10 @@ public class ClassroomAddController extends AbstractCommand {
     out.println("등록하였습니다.");
   }
 
+  @Override
+  public String getCommandString() {
+    // TODO Auto-generated method stub
+    return "classroom/add";
+  }
+
 }
