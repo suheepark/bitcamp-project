@@ -1,56 +1,20 @@
 package bitcamp.java89.ems.server.dao;
-import java.io.EOFException;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 import bitcamp.java89.ems.server.vo.Contact;
-public class ContactDao {
+public class ContactDao extends AbstractDao<Contact> {
   static ContactDao obj;
-  private String filename = "contact-v1.7.data";
-  private ArrayList<Contact> list;
   
-  private ContactDao() throws IOException {
-    this.doLoad();
+  private ContactDao() throws Exception {
+    super("contact-v1.9.data");
   }
   
-  public static ContactDao getInstance() throws IOException {
+  public static ContactDao getInstance() throws Exception {
     if (obj == null) {
       obj = new ContactDao();
+      obj.load();
     }
     return obj;
-  }
-
-  @SuppressWarnings("unchecked")
-  private void doLoad() {
-    FileInputStream in0 = null;
-    ObjectInputStream in = null;
-    try {
-      in0 = new FileInputStream(this.filename);
-      in = new ObjectInputStream(in0);
-      list = (ArrayList<Contact>)in.readObject();
-    } catch (EOFException e) {
-      // 파일을 모두 읽은 경우
-    } catch (Exception e) {
-      System.out.println("데이터 로딩 중 오류 발생!");
-      list = new ArrayList<Contact>();
-    } finally {
-      try {
-        in.close();
-        in0.close();
-      } catch (Exception e) {}
-    }
-  }
-
-  public void save() throws Exception {
-    FileOutputStream out0 = new FileOutputStream(this.filename);
-    ObjectOutputStream out = new ObjectOutputStream(out0);
-    out.writeObject(list);
-    out.close();
-    out0.close();
   }
 
   public boolean existEmail(String email) {
