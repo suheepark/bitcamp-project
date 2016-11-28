@@ -7,9 +7,13 @@ import bitcamp.java89.ems.server.AbstractCommand;
 import bitcamp.java89.ems.server.dao.ClassroomDao;
 import bitcamp.java89.ems.server.vo.Classroom;
 public class ClassroomListController extends AbstractCommand {
+  ClassroomDao classroomDao;
+  
+  public void setClassroomDao(ClassroomDao classroomDao) {
+    this.classroomDao = classroomDao;
+  }
   @Override
   protected void doResponse(HashMap<String,String> paramMap, PrintStream out) throws Exception {
-    ClassroomDao classroomDao = ClassroomDao.getInstance();
     ArrayList<Classroom> list = classroomDao.getList();
     for (Classroom classroom : list) {
       out.printf("%d %d %s %s %s %s\n",

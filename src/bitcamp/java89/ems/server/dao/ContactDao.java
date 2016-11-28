@@ -3,20 +3,7 @@ import java.util.ArrayList;
 
 import bitcamp.java89.ems.server.vo.Contact;
 public class ContactDao extends AbstractDao<Contact> {
-  static ContactDao obj;
   
-  private ContactDao() throws Exception {
-    super("contact-v1.9.data");
-  }
-  
-  public static ContactDao getInstance() throws Exception {
-    if (obj == null) {
-      obj = new ContactDao();
-      obj.load();
-    }
-    return obj;
-  }
-
   public boolean existEmail(String email) {
     for (Contact contact : list) {
       if (contact.getEmail().toLowerCase().equals(email)) {

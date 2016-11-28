@@ -8,9 +8,13 @@ import bitcamp.java89.ems.server.dao.ContactDao;
 import bitcamp.java89.ems.server.vo.Contact;
 
 public class ContactUpdateController extends AbstractCommand{
+  ContactDao contactDao;
+  
+  public void setContactDao(ContactDao contactDao) {
+    this.contactDao = contactDao;
+  }
   @Override
   protected void doResponse(HashMap<String,String> paramMap, PrintStream out) throws Exception {
-    ContactDao contactDao = ContactDao.getInstance();
     if (contactDao.existEmail(paramMap.get("email"))) {
       Contact contact = new Contact();
       contact.setName(paramMap.get("name"));
