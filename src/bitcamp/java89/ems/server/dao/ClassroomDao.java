@@ -3,6 +3,11 @@ import java.util.ArrayList;
 
 import bitcamp.java89.ems.server.vo.Classroom;
 public class ClassroomDao extends AbstractDao<Classroom> {
+  
+  public ClassroomDao() throws Exception {
+    this.setFilename("classroom-v1.9.data");
+    this.load();
+  }
 
   public boolean existRoomNo(int roomNo) {
     for (Classroom classroom : list) {
