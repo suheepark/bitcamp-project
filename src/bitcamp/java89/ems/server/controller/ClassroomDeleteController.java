@@ -3,7 +3,10 @@ import java.io.PrintStream;
 import java.util.HashMap;
 
 import bitcamp.java89.ems.server.AbstractCommand;
+import bitcamp.java89.ems.server.annotation.Component;
 import bitcamp.java89.ems.server.dao.ClassroomDao;
+
+@Component(value = "classroom/delete")
 public class ClassroomDeleteController extends AbstractCommand {
   ClassroomDao classroomDao;
   
@@ -15,11 +18,4 @@ public class ClassroomDeleteController extends AbstractCommand {
     classroomDao.delete(Integer.parseInt(paramMap.get("roomno")));
     out.println("삭제하였습니다");
   }
-
-  @Override
-  public String getCommandString() {
-    // TODO Auto-generated method stub
-    return "classroom/delete";
-  }
-
 }

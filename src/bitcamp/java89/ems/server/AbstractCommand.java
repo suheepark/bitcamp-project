@@ -4,8 +4,6 @@ import java.io.PrintStream;
 import java.util.HashMap;
 
 public abstract class AbstractCommand implements Command {
-  
-  public abstract String getCommandString();
 
   public void service(java.util.HashMap<String,String> paramMap, java.io.PrintStream out) {
     try {

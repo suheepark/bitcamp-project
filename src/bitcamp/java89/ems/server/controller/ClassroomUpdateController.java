@@ -3,8 +3,11 @@ import java.io.PrintStream;
 import java.util.HashMap;
 
 import bitcamp.java89.ems.server.AbstractCommand;
+import bitcamp.java89.ems.server.annotation.Component;
 import bitcamp.java89.ems.server.dao.ClassroomDao;
 import bitcamp.java89.ems.server.vo.Classroom;
+
+@Component(value = "classroom/update")
 public class ClassroomUpdateController extends AbstractCommand {
   ClassroomDao classroomDao;
   
@@ -24,11 +27,4 @@ public class ClassroomUpdateController extends AbstractCommand {
     out.println("변경하였습니다.");
     return;
   }
-
-  @Override
-  public String getCommandString() {
-    // TODO Auto-generated method stub
-    return "classroom/update";
-  }
-
 }

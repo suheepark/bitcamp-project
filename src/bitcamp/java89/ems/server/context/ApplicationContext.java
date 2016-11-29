@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
+import bitcamp.java89.ems.server.annotation.Component;
+
 public class ApplicationContext {
   
   HashMap<String,Object> objPool = new HashMap<>();
@@ -68,11 +70,13 @@ public class ApplicationContext {
       try {
         Object obj = clazz.newInstance();
         String key = null;
-        try {
-          Method m = clazz.getMethod("getCommandString");
-          key = (String)m.invoke(obj);
-        } catch (Exception e) {
-          key = clazz.getName();
+        Component compAnno = clazz.getAnnotation(Component.class);
+        if (compAnno.value().length() == 0) {
+          objPool.put(clazz.getName(), obj);
+          System.out.println(clazz.getName());
+        } else {
+          objPool.put(compAnno.value(), obj);
+          System.out.println(compAnno.value());
         }
         objPool.put(key, obj);
       } catch (Exception e) {e.printStackTrace();}
@@ -105,12 +109,16 @@ public class ApplicationContext {
       } else {
         try {
           Class<?> c = loadClass(file);
-          if (!isAbstract(c)) {
+          if (!isAbstract(c) && isComponent(c)) {
             classList.add(c);
           }
         } catch (Exception e) {e.printStackTrace();}
       }
     }
+  }
+
+  private boolean isComponent(Class<?> c) {
+    return c.getAnnotation(Component.class) != null;
   }
 
   private Class<?> loadClass(File file) throws IOException, ClassNotFoundException {
@@ -130,5 +138,5 @@ public class ApplicationContext {
     ApplicationContext appContext = new ApplicationContext(
         new String[]{"bitcamp.java89.ems.server.controller", "bitcamp.java89.ems.server.dao"});
   }
-  */
+ */
 }

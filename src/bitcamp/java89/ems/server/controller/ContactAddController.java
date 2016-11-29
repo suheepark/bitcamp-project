@@ -4,9 +4,11 @@ import java.io.PrintStream;
 import java.util.HashMap;
 
 import bitcamp.java89.ems.server.AbstractCommand;
+import bitcamp.java89.ems.server.annotation.Component;
 import bitcamp.java89.ems.server.dao.ContactDao;
 import bitcamp.java89.ems.server.vo.Contact;
 
+@Component(value = "contact/add")
 public class ContactAddController extends AbstractCommand{
   ContactDao contactDao;
   
@@ -28,10 +30,4 @@ public class ContactAddController extends AbstractCommand{
     contactDao.insert(contact);
     out.println("등록하였습니다.");
     }
-
-  @Override
-  public String getCommandString() {
-    // TODO Auto-generated method stub
-    return "contact/add";
-  }
 }

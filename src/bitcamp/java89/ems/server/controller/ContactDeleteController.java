@@ -3,8 +3,10 @@ import java.io.PrintStream;
 import java.util.HashMap;
 
 import bitcamp.java89.ems.server.AbstractCommand;
+import bitcamp.java89.ems.server.annotation.Component;
 import bitcamp.java89.ems.server.dao.ContactDao;
 
+@Component(value = "contact/delete")
 public class ContactDeleteController extends AbstractCommand{
   ContactDao contactDao;
   
@@ -21,10 +23,4 @@ public class ContactDeleteController extends AbstractCommand{
     contactDao.delete(paramMap.get("email"));
     out.println("삭제하였습니다.");
    }
-
-  @Override
-  public String getCommandString() {
-    // TODO Auto-generated method stub
-    return "contact/delete";
-  } 
 }

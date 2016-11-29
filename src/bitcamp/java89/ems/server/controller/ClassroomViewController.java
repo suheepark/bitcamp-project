@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import bitcamp.java89.ems.server.AbstractCommand;
+import bitcamp.java89.ems.server.annotation.Component;
 import bitcamp.java89.ems.server.dao.ClassroomDao;
 import bitcamp.java89.ems.server.vo.Classroom;
+
+@Component(value = "classroom/view")
 public class ClassroomViewController extends AbstractCommand {
   ClassroomDao classroomDao;
   
@@ -27,11 +30,4 @@ public class ClassroomViewController extends AbstractCommand {
       }
     }
   }
-
-  @Override
-  public String getCommandString() {
-    // TODO Auto-generated method stub
-    return "classroom/view";
-  }
-
 }

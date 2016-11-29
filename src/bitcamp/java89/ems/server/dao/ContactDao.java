@@ -1,12 +1,15 @@
 package bitcamp.java89.ems.server.dao;
 import java.util.ArrayList;
 
+import bitcamp.java89.ems.server.annotation.Component;
 import bitcamp.java89.ems.server.vo.Contact;
+
+@Component
 public class ContactDao extends AbstractDao<Contact> {
   
   public ContactDao() throws Exception {
     this.setFilename("contact-v1.9.data");
-    this.load();
+    try {this.load();} catch (Exception e) {}
   }
   
   public boolean existEmail(String email) {

@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import bitcamp.java89.ems.server.AbstractCommand;
+import bitcamp.java89.ems.server.annotation.Component;
 import bitcamp.java89.ems.server.dao.ClassroomDao;
 import bitcamp.java89.ems.server.vo.Classroom;
+
+@Component(value = "classroom/list")
 public class ClassroomListController extends AbstractCommand {
   ClassroomDao classroomDao;
   
@@ -23,11 +26,4 @@ public class ClassroomListController extends AbstractCommand {
       ((classroom.isLocker()) ? "Yes" : "No"));
     }
   }
-
-  @Override
-  public String getCommandString() {
-    // TODO Auto-generated method stub
-    return "classroom/list";
-  }
-
 }
