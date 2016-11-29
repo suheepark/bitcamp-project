@@ -21,6 +21,10 @@ public class ApplicationContext {
     return objPool.get(name);
   }
   
+  public Collection<Object> getAllBeans() {
+    return objPool.values();
+  }
+  
   public ApplicationContext(String[] packages) {
     ArrayList<Class<?>> classList = getClassList(packages);
     prepareObjects(classList);
@@ -73,7 +77,6 @@ public class ApplicationContext {
         Component compAnno = clazz.getAnnotation(Component.class);
         if (compAnno.value().length() == 0) {
           objPool.put(clazz.getName(), obj);
-          System.out.println(clazz.getName());
         } else {
           objPool.put(compAnno.value(), obj);
           System.out.println(compAnno.value());
