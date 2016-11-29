@@ -2,20 +2,20 @@ package bitcamp.java89.ems.server.controller;
 import java.io.PrintStream;
 import java.util.HashMap;
 
-import bitcamp.java89.ems.server.AbstractCommand;
 import bitcamp.java89.ems.server.annotation.Component;
+import bitcamp.java89.ems.server.annotation.RequestMapping;
 import bitcamp.java89.ems.server.dao.ClassroomDao;
 import bitcamp.java89.ems.server.vo.Classroom;
 
 @Component(value = "classroom/add")
-public class ClassroomAddController extends AbstractCommand {
+public class ClassroomAddController {
   ClassroomDao classroomDao;
   
   public void setClassroomDao(ClassroomDao classroomDao) {
     this.classroomDao = classroomDao;
   }
-  @Override
-  protected void doResponse(HashMap<String,String> paramMap, PrintStream out) throws Exception {
+  @RequestMapping
+  public void add(HashMap<String,String> paramMap, PrintStream out) throws Exception {
     Classroom classroom = new Classroom(); 
     classroom.setRoomNo(Integer.parseInt(paramMap.get("roomno")));
     classroom.setCapacity(Integer.parseInt(paramMap.get("capacity")));

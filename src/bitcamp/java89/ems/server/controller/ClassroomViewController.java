@@ -3,20 +3,20 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import bitcamp.java89.ems.server.AbstractCommand;
 import bitcamp.java89.ems.server.annotation.Component;
+import bitcamp.java89.ems.server.annotation.RequestMapping;
 import bitcamp.java89.ems.server.dao.ClassroomDao;
 import bitcamp.java89.ems.server.vo.Classroom;
 
 @Component(value = "classroom/view")
-public class ClassroomViewController extends AbstractCommand {
+public class ClassroomViewController {
   ClassroomDao classroomDao;
   
   public void setClassroomDao(ClassroomDao classroomDao) {
     this.classroomDao = classroomDao;
   }
-  @Override
-  protected void doResponse(HashMap<String,String> paramMap, PrintStream out) throws Exception {
+  @RequestMapping
+  public void view(HashMap<String,String> paramMap, PrintStream out) throws Exception {
     ArrayList<Classroom> list = classroomDao.getListByRoomNo(Integer.parseInt(paramMap.get("roomno")));
     for (Classroom classroom : list) {
       if (classroom.getRoomNo() == Integer.parseInt(paramMap.get("roomno"))) {
