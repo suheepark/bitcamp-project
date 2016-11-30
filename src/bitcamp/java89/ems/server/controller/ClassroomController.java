@@ -35,7 +35,7 @@ public class ClassroomController {
   }
   
   @RequestMapping(value = "classroom/list")
-  public void list(HashMap<String,String> paramMap, PrintStream out) throws Exception {
+  public void list(PrintStream out) throws Exception {
     ArrayList<Classroom> list = classroomDao.getList();
     for (Classroom classroom : list) {
       out.printf("%d %d %s %s %s %s\n",

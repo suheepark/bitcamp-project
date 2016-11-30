@@ -3,10 +3,12 @@ package bitcamp.java89.ems.server;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.PrintStream;
+import java.lang.reflect.Parameter;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.Scanner;
 
+import bitcamp.java89.ems.server.annotation.RequestParam;
 import bitcamp.java89.ems.server.context.RequestHandlerMapping;
 import bitcamp.java89.ems.server.context.RequestHandlerMapping.RequestHandler;
 
@@ -35,12 +37,12 @@ public class RequestThread extends Thread {
         
         String[] command = in.nextLine().split("\\?");
 
-        HashMap<String,String> paramMap = new HashMap<>();
+        HashMap<String,String> dataMap = new HashMap<>();
         if (command.length == 2) {
           String[] params = command[1].split("&");
           for (String value : params) {
             String[] kv = value.split("=");
-            paramMap.put(kv[0], kv[1]);
+            dataMap.put(kv[0], kv[1]);
           }
         }
         
@@ -55,7 +57,24 @@ public class RequestThread extends Thread {
           continue;
         }
         try {
-          requestHandler.method.invoke(requestHandler.obj, paramMap, out);
+          Parameter[] params = requestHandler.method.getParameters();
+          Object[] args = new Object[params.length];
+          for (int i = 0; i < params.length; i++) {
+            RequestParam anno = params[i].getAnnotation(RequestParam.class);
+            if (anno != null) {
+              String value = anno.value();
+              args[i] = dataMap.get(value);
+            } else {
+              if (params[i].getType() == PrintStream.class) {
+                args[i] = out;
+              } else if (params[i].getType() == HashMap.class) {
+                args[i] = dataMap;
+              } else {
+                args[i] = null;
+              }
+            }
+          }
+          requestHandler.method.invoke(requestHandler.obj, args);
         } catch (Exception e) {
           out.println("작업 중 오류가 발생하였습니다.");
           e.printStackTrace();
