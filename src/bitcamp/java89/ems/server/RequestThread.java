@@ -3,6 +3,7 @@ package bitcamp.java89.ems.server;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.PrintStream;
+import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.net.Socket;
 import java.util.HashMap;
@@ -57,24 +58,7 @@ public class RequestThread extends Thread {
           continue;
         }
         try {
-          Parameter[] params = requestHandler.method.getParameters();
-          Object[] args = new Object[params.length];
-          for (int i = 0; i < params.length; i++) {
-            RequestParam anno = params[i].getAnnotation(RequestParam.class);
-            if (anno != null) {
-              String value = anno.value();
-              args[i] = dataMap.get(value);
-            } else {
-              if (params[i].getType() == PrintStream.class) {
-                args[i] = out;
-              } else if (params[i].getType() == HashMap.class) {
-                args[i] = dataMap;
-              } else {
-                args[i] = null;
-              }
-            }
-          }
-          requestHandler.method.invoke(requestHandler.obj, args);
+          requestHandler.method.invoke(requestHandler.obj, getArguments(requestHandler.method, dataMap, out));
         } catch (Exception e) {
           out.println("작업 중 오류가 발생하였습니다.");
           e.printStackTrace();
@@ -86,6 +70,34 @@ public class RequestThread extends Thread {
       try {out.close();} catch (Exception e) {}
       try {socket.close();} catch (Exception e) {}
     }
+  }
+
+  private Object[] getArguments(Method method, HashMap<String, String> dataMap, PrintStream out) {
+    Parameter[] params = method.getParameters();
+    Object[] args = new Object[params.length];
+    for (int i = 0; i < params.length; i++) {
+      RequestParam anno = params[i].getAnnotation(RequestParam.class);
+      if (anno != null) {
+        String value = anno.value();
+        if (params[i].getType() == int.class) {
+          args[i] = Integer.parseInt(dataMap.get(value));
+        } else if (params[i].getType() == boolean.class) {
+          args[i] = Boolean.parseBoolean(dataMap.get(value));
+        } else if (params[i].getType() == String.class) {
+          args[i] = dataMap.get(value);
+        } else
+          args[i] = null;
+      } else {
+        if (params[i].getType() == PrintStream.class) {
+          args[i] = out;
+        } else if (params[i].getType() == HashMap.class) {
+          args[i] = dataMap;
+        } else {
+          args[i] = null;
+        }
+      }
+    }
+    return args;
   }
 
   private boolean doQuit() {

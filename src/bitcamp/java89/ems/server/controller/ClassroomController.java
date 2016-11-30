@@ -1,10 +1,10 @@
 package bitcamp.java89.ems.server.controller;
 import java.io.PrintStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import bitcamp.java89.ems.server.annotation.Component;
 import bitcamp.java89.ems.server.annotation.RequestMapping;
+import bitcamp.java89.ems.server.annotation.RequestParam;
 import bitcamp.java89.ems.server.dao.ClassroomDao;
 import bitcamp.java89.ems.server.vo.Classroom;
 
@@ -15,22 +15,30 @@ public class ClassroomController {
   public void setClassroomDao(ClassroomDao classroomDao) {
     this.classroomDao = classroomDao;
   }
+  //classroom/add?roomno=301&capacity=30&classname=자바&classtime=09~18&projector=true&locker=true
   @RequestMapping(value = "classroom/add")
-  public void add(HashMap<String,String> paramMap, PrintStream out) throws Exception {
+  public void add(
+      @RequestParam("roomno")int roomno,
+      @RequestParam("capacity")int capacity,
+      @RequestParam("classname")String classname,
+      @RequestParam("classtime")String classtime,
+      @RequestParam("projector")boolean projector,
+      @RequestParam("locker")boolean locker,
+      PrintStream out) throws Exception {
     Classroom classroom = new Classroom(); 
-    classroom.setRoomNo(Integer.parseInt(paramMap.get("roomno")));
-    classroom.setCapacity(Integer.parseInt(paramMap.get("capacity")));
-    classroom.setClassName(paramMap.get("classname"));
-    classroom.setClassTime(paramMap.get("classtime"));
-    classroom.setProjector(paramMap.get("projector").equals("t") ? true : false );
-    classroom.setLocker(paramMap.get("locker").equals("t") ? true : false );
+    classroom.setRoomNo(roomno);
+    classroom.setCapacity(capacity);
+    classroom.setClassName(classname);
+    classroom.setClassTime(classtime);
+    classroom.setProjector(projector);
+    classroom.setLocker(locker);
     classroomDao.insert(classroom);
     out.println("등록하였습니다.");
   }
   
   @RequestMapping(value = "classroom/delete")
-  public void delete(HashMap<String,String> paramMap, PrintStream out) throws Exception {
-    classroomDao.delete(Integer.parseInt(paramMap.get("roomno")));
+  public void delete(@RequestParam("roomno")int roomno, PrintStream out) throws Exception {
+    classroomDao.delete(roomno);
     out.println("삭제하였습니다");
   }
   
@@ -47,24 +55,31 @@ public class ClassroomController {
   }
   
   @RequestMapping(value = "classroom/update")
-  public void update(HashMap<String,String> paramMap, PrintStream out) throws Exception {
+  public void update(
+      @RequestParam("roomno")int roomno,
+      @RequestParam("capacity")int capacity,
+      @RequestParam("classname")String classname,
+      @RequestParam("classtime")String classtime,
+      @RequestParam("projector")boolean projector,
+      @RequestParam("locker")boolean locker,
+      PrintStream out) throws Exception {
     Classroom classroom = new Classroom();
-    classroom.setRoomNo(Integer.parseInt(paramMap.get("roomno")));
-    classroom.setCapacity(Integer.parseInt(paramMap.get("capacity")));
-    classroom.setClassName(paramMap.get("classname"));
-    classroom.setClassTime(paramMap.get("classtime"));
-    classroom.setProjector(paramMap.get("projector").equals("t") ? true : false);
-    classroom.setLocker(paramMap.get("locker").equals("t") ? true : false);
+    classroom.setRoomNo(roomno);
+    classroom.setCapacity(capacity);
+    classroom.setClassName(classname);
+    classroom.setClassTime(classtime);
+    classroom.setProjector(projector);
+    classroom.setLocker(locker);
     classroomDao.update(classroom);
     out.println("변경하였습니다.");
     return;
   }
   
   @RequestMapping(value = "classroom/view")
-  public void view(HashMap<String,String> paramMap, PrintStream out) throws Exception {
-    ArrayList<Classroom> list = classroomDao.getListByRoomNo(Integer.parseInt(paramMap.get("roomno")));
+  public void view(@RequestParam("roomno")int roomno, PrintStream out) throws Exception {
+    ArrayList<Classroom> list = classroomDao.getListByRoomNo(roomno);
     for (Classroom classroom : list) {
-      if (classroom.getRoomNo() == Integer.parseInt(paramMap.get("roomno"))) {
+      if (classroom.getRoomNo() == roomno) {
         out.printf("강의실 번호 : %d\n", classroom.getRoomNo());
         out.printf("수용인원 : %d\n", classroom.getCapacity());
         out.printf("강의명 : %s\n", classroom.getClassName());
