@@ -1,6 +1,5 @@
 package bitcamp.java89.ems.server.dao.impl;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -12,12 +11,9 @@ import bitcamp.java89.ems.server.vo.Classroom;
 @Component
 public class ClassroomMySQLDao implements ClassroomDao{
   Connection con;
-  
-  public ClassroomMySQLDao() throws Exception {
-    try {
-      Class.forName("com.mysql.jdbc.Driver");
-      con = DriverManager.getConnection("jdbc:mysql://localhost:3306/java89db", "java89", "1111");
-    } catch (Exception e) {e.printStackTrace();}
+
+  public void setConnetion(Connection con) {
+    this.con = con;
   }
 
   public ArrayList<Classroom> getList() throws Exception {

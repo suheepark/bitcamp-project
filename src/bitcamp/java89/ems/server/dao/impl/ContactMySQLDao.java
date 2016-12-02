@@ -1,6 +1,5 @@
 package bitcamp.java89.ems.server.dao.impl;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -12,14 +11,11 @@ import bitcamp.java89.ems.server.vo.Contact;
 @Component
 public class ContactMySQLDao implements ContactDao {
   Connection con;
-  
-  public ContactMySQLDao() throws Exception {
-    try {
-      Class.forName("com.mysql.jdbc.Driver");
-      con = DriverManager.getConnection("jdbc:mysql://localhost:3306/java89db", "java89", "1111");
-    } catch (Exception e) {e.printStackTrace();}
+
+  public void setConnetion(Connection con) {
+    this.con = con;
   }
-  
+
   public ArrayList<Contact> getList() throws Exception{
     ArrayList<Contact> list = new ArrayList<>();
     try (
