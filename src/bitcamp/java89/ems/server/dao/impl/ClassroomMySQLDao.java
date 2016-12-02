@@ -11,15 +11,18 @@ import bitcamp.java89.ems.server.vo.Classroom;
 
 @Component
 public class ClassroomMySQLDao implements ClassroomDao{
+  Connection con;
   
   public ClassroomMySQLDao() throws Exception {
+    try {
+      Class.forName("com.mysql.jdbc.Driver");
+      con = DriverManager.getConnection("jdbc:mysql://localhost:3306/java89db", "java89", "1111");
+    } catch (Exception e) {e.printStackTrace();}
   }
 
   public ArrayList<Classroom> getList() throws Exception {
     ArrayList<Classroom> list = new ArrayList<>();
-    Class.forName("com.mysql.jdbc.Driver");
     try (
-        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/java89db", "java89", "1111");
         PreparedStatement stmt = con.prepareStatement(
             "select roomno, capa, classname, classtime, projector,locker from ex_classrooms");
         ResultSet rs = stmt.executeQuery();
@@ -41,9 +44,7 @@ public class ClassroomMySQLDao implements ClassroomDao{
   
   public ArrayList<Classroom> getListByRoomNo(int roomNo) throws Exception {
     ArrayList<Classroom> list = new ArrayList<>();
-    Class.forName("com.mysql.jdbc.Driver");
     try (
-        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/java89db", "java89", "1111");
         PreparedStatement stmt = con.prepareStatement(
             "select roomno, capa, classname, classtime, projector, locker from ex_classrooms where roomno=?");
         )
@@ -67,9 +68,7 @@ public class ClassroomMySQLDao implements ClassroomDao{
   }
   
   public void insert(Classroom classroom) throws Exception {
-    Class.forName("com.mysql.jdbc.Driver");
     try (
-        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/java89db", "java89", "1111");
         PreparedStatement stmt = con.prepareStatement(
             "insert into ex_classrooms(roomno,capa,classname,classtime,projector,locker) values(?,?,?,?,?,?)");
         )
@@ -85,9 +84,7 @@ public class ClassroomMySQLDao implements ClassroomDao{
   }
   
   public void update(Classroom classroom) throws Exception {
-    Class.forName("com.mysql.jdbc.Driver");
     try (
-        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/java89db", "java89", "1111");
         PreparedStatement stmt = con.prepareStatement(
             "update ex_classrooms set capa=?, classname=?, classtime=?, projector=?, locker=? where roomno=?");
         )
@@ -103,9 +100,7 @@ public class ClassroomMySQLDao implements ClassroomDao{
   }
 
   public void delete(int roomNo) throws Exception {
-    Class.forName("com.mysql.jdbc.Driver");
     try (
-        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/java89db", "java89", "1111");
         PreparedStatement stmt = con.prepareStatement("delete from ex_classrooms where roomno=?");
         )
     {
@@ -115,9 +110,7 @@ public class ClassroomMySQLDao implements ClassroomDao{
   }
 
   public boolean existRoomNo(int roomNo) throws Exception {
-    Class.forName("com.mysql.jdbc.Driver");
     try (
-        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/java89db", "java89", "1111");
         PreparedStatement stmt = con.prepareStatement("select * from ex_classrooms where roomno=?");
         )
     {
