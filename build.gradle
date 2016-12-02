@@ -11,3 +11,13 @@ sourceSets {
       }
   }
 }
+
+repositories {
+    mavenCentral()  //https://repo1.maven.org/maven2/
+}
+
+dependencies {
+  // https://mvnrepository.com/artifact/org.springframework/spring-context
+  compile group: 'org.springframework', name: 'spring-context', version: '4.3.4.RELEASE'
+  compile fileTree(dir:'libs', include: '*.jar')
+}

@@ -3,7 +3,9 @@ package bitcamp.java89.ems.server.controller;
 import java.io.PrintStream;
 import java.util.ArrayList;
 
-import bitcamp.java89.ems.server.annotation.Component;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import bitcamp.java89.ems.server.annotation.RequestMapping;
 import bitcamp.java89.ems.server.annotation.RequestParam;
 import bitcamp.java89.ems.server.dao.ContactDao;
@@ -11,11 +13,7 @@ import bitcamp.java89.ems.server.vo.Contact;
 
 @Component
 public class ContactController {
-  ContactDao contactDao;
-  
-  public void setContactDao(ContactDao contactDao) {
-    this.contactDao = contactDao;
-  }
+  @Autowired ContactDao contactDao;
   
   @RequestMapping(value = "contact/add")
   public void add(

@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.ArrayList;
 
-import bitcamp.java89.ems.server.annotation.Component;
+import org.springframework.stereotype.Component;
 
 @Component
 public class DataSource {
@@ -12,7 +12,7 @@ public class DataSource {
   
   public DataSource() {
     try {
-      Class.forName("com.musql.jdbc.Driver");
+      Class.forName("com.mysql.jdbc.Driver");
     } catch (Exception e) {
       e.printStackTrace();
     }

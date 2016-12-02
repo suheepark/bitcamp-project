@@ -4,7 +4,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
-import bitcamp.java89.ems.server.annotation.Component;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import bitcamp.java89.ems.server.dao.ContactDao;
 import bitcamp.java89.ems.server.util.DataSource;
 import bitcamp.java89.ems.server.vo.Contact;
@@ -12,11 +14,7 @@ import bitcamp.java89.ems.server.vo.Contact;
 @Component
 public class ContactMySQLDao implements ContactDao {
   
-  DataSource ds;
-
-  public void setDataSource(DataSource ds) {
-    this.ds = ds;
-  }
+  @Autowired DataSource ds;
 
   public ArrayList<Contact> getList() throws Exception{
     ArrayList<Contact> list = new ArrayList<>();

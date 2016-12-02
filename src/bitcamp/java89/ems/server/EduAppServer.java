@@ -1,7 +1,10 @@
 package bitcamp.java89.ems.server;
 import java.net.ServerSocket;
+import java.util.ArrayList;
 
-import bitcamp.java89.ems.server.context.ApplicationContext;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
 import bitcamp.java89.ems.server.context.RequestHandlerMapping;
 
 public class EduAppServer{
@@ -10,8 +13,14 @@ public class EduAppServer{
   RequestHandlerMapping handlerMapping;
   
   public EduAppServer() {
-    appContext = new ApplicationContext(new String[]{"bitcamp.java89.ems.server"});
-    handlerMapping = new RequestHandlerMapping(appContext.getAllBeans());
+    appContext = new ClassPathXmlApplicationContext(new String[]{"bitcamp/java89/ems/server/application-context.xml"});
+    String[] names = appContext.getBeanDefinitionNames();
+    ArrayList<Object> objList = new ArrayList<>();
+    for (String name : names) {
+      System.out.println(name);
+      objList.add(appContext.getBean(name));
+    }
+    handlerMapping = new RequestHandlerMapping(objList);
   }
   
   private void service() throws Exception{
